@@ -10,7 +10,7 @@ fun printDebug(text: String) {
 fun main(args: Array<String>) {
     val start = System.currentTimeMillis()
 
-    HappyNumber.execute()
+    SpiralOrder.execute()
 
     println((System.currentTimeMillis() - start))
 }
