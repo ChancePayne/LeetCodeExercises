@@ -1,5 +1,3 @@
-import kotlin.math.max
-
 val shouldPrint = false
 
 fun printDebug(text: String) {
@@ -7,10 +5,10 @@ fun printDebug(text: String) {
         println(text)
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val start = System.currentTimeMillis()
 
-    SpiralOrder.execute()
+    LongestSubstring.execute()
 
     println((System.currentTimeMillis() - start))
 }
