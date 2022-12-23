@@ -4,7 +4,7 @@ class BinaryTreeLowestCommonAncestor {
         fun execute() {
             val solution = BinaryTreeLowestCommonAncestor()
             println(solution.lowestCommonAncestor(
-                solution.buildTreeNode(arrayOf(3, 5, 1, 6, 2, 0, 8, null, null, 7, 4), 0),
+                TreeNode.buildTreeNode(arrayOf(3, 5, 1, 6, 2, 0, 8, null, null, 7, 4), 0),
                 TreeNode(5),
                 TreeNode(4)
             ))
@@ -34,18 +34,6 @@ class BinaryTreeLowestCommonAncestor {
         }
         return false
     }
-
-
-
-    fun buildTreeNode(array: Array<Int?>, i: Int): TreeNode? {
-        var root: TreeNode? = null
-        if (i < array.size && array[i] != null) {
-            root = TreeNode(array[i]!!)
-            root.left = buildTreeNode(array, 2 * i + 1)
-            root.right = buildTreeNode(array, 2 * i + 2)
-        }
-        return root
-    }
 }
 
 class TreeNode(var `val`: Int = 0) {
@@ -61,6 +49,18 @@ class TreeNode(var `val`: Int = 0) {
             print("${root.`val`} ")
             inOrder(root.left)
             inOrder(root.right)
+        }
+    }
+
+    companion object {
+        fun buildTreeNode(array: Array<Int?>, i: Int): TreeNode? {
+            var root: TreeNode? = null
+            if (i < array.size && array[i] != null) {
+                root = TreeNode(array[i]!!)
+                root.left = buildTreeNode(array, 2 * i + 1)
+                root.right = buildTreeNode(array, 2 * i + 2)
+            }
+            return root
         }
     }
 }
