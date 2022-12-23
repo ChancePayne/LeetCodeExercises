@@ -8,7 +8,7 @@ fun printDebug(text: String) {
 fun main() {
     val start = System.currentTimeMillis()
 
-    MaximumDepthTree.execute()
+    TwoSum.execute()
 
     println((System.currentTimeMillis() - start))
 }
