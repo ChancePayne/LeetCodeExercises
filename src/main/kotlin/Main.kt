@@ -8,7 +8,7 @@ fun printDebug(text: String) {
 fun main() {
     val start = System.currentTimeMillis()
 
-    BinaryTreeLowestCommonAncestor.execute()
+    DisappearedNumbers.execute()
 
     println()
     println((System.currentTimeMillis() - start))
