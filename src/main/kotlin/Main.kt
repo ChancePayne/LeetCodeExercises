@@ -8,7 +8,7 @@ fun printDebug(text: String) {
 fun main() {
     val start = System.currentTimeMillis()
 
-    WordSearch.execute()
+    BuyAndSellStock.execute()
 
     println()
     println((System.currentTimeMillis() - start))
