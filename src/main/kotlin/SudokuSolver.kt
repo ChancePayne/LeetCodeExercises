@@ -1,8 +1,10 @@
+import kotlin.random.Random
+
 class SudokuSolver {
     companion object {
         fun execute() {
             val solution = SudokuSolver()
-            /*println(solution.solveSudoku(
+            println(solution.solveSudoku(
                 arrayOf(
                 charArrayOf('5','3','.','.','7','.','.','.','.'),
                 charArrayOf('6','.','.','1','9','5','.','.','.'),
@@ -14,8 +16,8 @@ class SudokuSolver {
                 charArrayOf('.','.','.','4','1','9','.','.','5'),
                 charArrayOf('.','.','.','.','8','.','.','7','9')
                 )
-            ))*/
-            println(solution.solveSudoku(
+            ))
+            /*println(solution.solveSudoku(
                 arrayOf(
                     charArrayOf('.','.','9','7','4','8','.','.','.'),
                     charArrayOf('7','.','.','.','.','.','.','.','.'),
@@ -27,7 +29,7 @@ class SudokuSolver {
                     charArrayOf('.','.','.','.','.','.','.','.','6'),
                     charArrayOf('.','.','.','2','7','5','9','.','.')
                 )
-            ))
+            ))*/
         }
     }
 
@@ -38,9 +40,20 @@ class SudokuSolver {
         val (intBoard, count) = charArrayToIntArray(board)
 
         repopulateCharArray(board, solver(intBoard, count))
+
+        print2DArray(board)
+    }
+
+    private fun print2DArray(board: Array<CharArray>) {
+        board.forEach { row ->
+            row.forEach { print("$it,") }
+            println()
+        }
     }
 
     private fun solver(board: Array<IntArray>, startCount: Int): Array<IntArray> {
+        val previousSteps = mutableListOf<Triple<Int, Int, Int>>()
+        var numGuesses = 0
         var count = startCount
         SUM_COMPLETE_SET = ((board.size + 1.0) * ((board.size) / 2.0)).toInt()
         for(i in 1..board.size) {
@@ -52,11 +65,11 @@ class SudokuSolver {
         var previousCount = count
         var failedLoops = 0
         while (count > 0 && failedLoops < 2) {
-            // check rows
+            /*// check rows
             board.forEachIndexed { r, row ->
                 val pair = checkLine(row)
-                if (pair.first != -1 && board[r][pair.second] == 0) {
-                    assignCell(board, r, pair.second, pair.first)
+                if (pair.first != -1 && pair.second != -1 && board[r][pair.second] == 0) {
+                    assignCell(board, r, pair.second, pair.first, previousSteps)
                     count--
                 }
             }
@@ -64,8 +77,8 @@ class SudokuSolver {
             // check columns
             for (c in board[0].indices) {
                 val pair = checkLine(getColumn(board, c))
-                if (pair.first != -1 && board[pair.second][c] == 0) {
-                    assignCell(board, pair.second, c, pair.first)
+                if (pair.first != -1 && pair.second != -1 && board[pair.second][c] == 0) {
+                    assignCell(board, pair.second, c, pair.first, previousSteps)
                     count--
                 }
             }
@@ -74,8 +87,8 @@ class SudokuSolver {
             for (r in 0 until edgeSize) {
                 for (c in 0 until edgeSize) {
                     val triple = checkSquare(board, r * edgeSize, c * edgeSize, edgeSize)
-                    if (triple.first != -1 && board[triple.second][triple.third] == 0) {
-                        assignCell(board, triple.second, triple.third, triple.first)
+                    if (triple.first != -1 && triple.second != -1 && board[triple.second][triple.third] == 0) {
+                        assignCell(board, triple.second, triple.third, triple.first, previousSteps)
                         count--
                     }
                 }
@@ -87,12 +100,12 @@ class SudokuSolver {
                     val tripleList = checkIntersection(board, r * edgeSize, c * edgeSize, edgeSize)
                     tripleList.forEach { triple ->
                         if (board[triple.second][triple.third] == 0) {
-                            assignCell(board, triple.second, triple.third, triple.first)
+                            assignCell(board, triple.second, triple.third, triple.first, previousSteps)
                             count--
                         }
                     }
                 }
-            }
+            }*/
 
             // cell elimination
             // look in square, row, column for 1-9 if only 1 possibility, replace
@@ -114,8 +127,15 @@ class SudokuSolver {
                         hashOfOptions.removeAll(rowOptions[r].toSet())
                         hashOfOptions.removeAll(colOptions[c].toSet())
                         if (hashOfOptions.size == 1) {
-                            assignCell(board, r, c, hashOfOptions.first())
+                            assignCell(board, r, c, hashOfOptions.first(), previousSteps)
                             count--
+                        } else if (hashOfOptions.size == 1 + failedLoops && Random.nextInt(5) == 0) {
+                            val value = hashOfOptions.toArray()[Random.nextInt(1 + failedLoops)] as Int
+                            previousSteps.clear()
+                            assignCell(board, r, c, value, previousSteps)
+                            count--
+                            numGuesses++
+                            failedLoops = 0
                         }
                         hashOfOptions.clear()
                     }
@@ -127,12 +147,32 @@ class SudokuSolver {
                 previousCount = count
                 failedLoops = 0
             }
+            if (failedLoops > 0 && numGuesses > 0) {
+                unwindSteps(board, previousSteps)
+                numGuesses = 0
+                failedLoops = 0
+                count += previousSteps.size
+                previousSteps.clear()
+            }
         }
         return board
     }
 
-    private fun assignCell(board: Array<IntArray>, r: Int, c: Int, value: Int) {
+    private fun unwindSteps(board: Array<IntArray>, previousSteps: MutableList<Triple<Int, Int, Int>>) {
+        previousSteps.forEach {
+            board[it.first][it.second] = 0
+        }
+    }
+
+    private fun assignCell(
+        board: Array<IntArray>,
+        r: Int,
+        c: Int,
+        value: Int,
+        previousSteps: MutableList<Triple<Int, Int, Int>>
+    ) {
         board[r][c] = value
+        previousSteps.add(Triple(r, c, value))
     }
 
     private fun buildLineOptions(options: HashSet<Int>, line: IntArray) {
