@@ -28,7 +28,7 @@ class PhoneLetterCombinations {
         digits.forEach { digit ->
             oldComboList = newComboList
             newComboList = mutableListOf()
-            LETTER_SETS[digit.digitToInt()].forEach { letter ->
+            LETTER_SETS[digit.toInt() - 48].forEach { letter ->
                 if (oldComboList.isNotEmpty()) {
                     oldComboList.forEach {combo ->
                         newComboList.add(combo + letter)
