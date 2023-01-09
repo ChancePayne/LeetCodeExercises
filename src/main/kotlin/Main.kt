@@ -8,7 +8,7 @@ fun printDebug(text: String) {
 fun main() {
     val start = System.currentTimeMillis()
 
-    MergeTwoSortedLists.execute()
+    PalindromeNumber.execute()
 
     println()
     println((System.currentTimeMillis() - start))
