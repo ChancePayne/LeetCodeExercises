@@ -4,5 +4,9 @@ class Utils {
             array.forEach { it.forEach { print("$it, ") }; println() }
             println()
         }
+        fun <T> print2dArray(array: Collection<Collection<T>>) {
+            array.forEach { it.forEach { print("$it, ") }; println() }
+            println()
+        }
     }
 }

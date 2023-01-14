@@ -100,7 +100,7 @@ class TreeNode(var `val`: Int = 0) {
     }
 
     companion object {
-        fun buildTreeNode(array: Array<Int?>, i: Int): TreeNode? {
+        fun buildTreeNode(array: Array<Int?>, i: Int = 0): TreeNode? {
             var root: TreeNode? = null
             if (i < array.size && array[i] != null) {
                 root = TreeNode(array[i]!!)
