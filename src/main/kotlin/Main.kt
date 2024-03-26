@@ -1,3 +1,5 @@
+import problems.*
+
 val shouldPrint = false
 
 fun printDebug(text: String) {
@@ -8,7 +10,7 @@ fun printDebug(text: String) {
 fun main() {
     val start = System.currentTimeMillis()
 
-    VerticalTraversal.execute()
+    RotateArray.execute()
 
     println()
     println((System.currentTimeMillis() - start))
